@@ -10,6 +10,17 @@ import Layout from "../layouts/Layout.astro";
     <option value="Chinstrap">Chinstrap</option>
     <option value="Gentoo">Gentoo</option>
   </select>
+  <select name="island" id="island">
+    <option value="">All islands</option>
+    <option value="Biscoe">Biscoe</option>
+    <option value="Dream">Dream</option>
+    <option value="Torgersen">Torgersen</option>
+  </select>
+  <select name="sex" id="sex">
+    <option value="">All sex</option>
+    <option value="MALE">male</option>
+    <option value="FEMALE">female</option>
+  </select>
   <div id="myplot"></div>
 </Layout>
 
@@ -18,9 +29,13 @@ import Layout from "../layouts/Layout.astro";
   import penguins from "../assets/penguins.json";
 
   const selectSpecies = document.querySelector("#species");
+  const selectIsland = document.querySelector("#island");
+  const selectSex = document.querySelector("#sex");
 
   function renderPlot() {
     const species = selectSpecies.value;
+    const island = selectIsland.value;
+    const sex = selectSex.value;
     const div = document.querySelector("#myplot");
     div.innerHTML = "";
 
@@ -30,7 +45,7 @@ import Layout from "../layouts/Layout.astro";
           x: "culmen_length_mm",
           y: "culmen_depth_mm",
           stroke: "species",
-          filter: (d) => d.species == species,
+          filter: (d) => (species == "" || d.species == species) && (island == "" || d.island == island) && (sex == "" || d.sex == sex),
         }),
       ],
     });
@@ -38,6 +53,8 @@ import Layout from "../layouts/Layout.astro";
   }
 
   selectSpecies.addEventListener("change", renderPlot );
+  selectIsland.addEventListener("change", renderPlot );
+  selectSex.addEventListener("change", renderPlot );
 
   renderPlot();
 </script>
