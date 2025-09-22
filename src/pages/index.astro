@@ -4,6 +4,12 @@ import Layout from "../layouts/Layout.astro";
 
 <Layout>
   <h1 class="text-2xl">R312 TP4 Penguins</h1>
+  <select name="species" id="species">
+    <option value="">All species</option>
+    <option value="Adelie">Adelie</option>
+    <option value="Chinstrap">Chinstrap</option>
+    <option value="Gentoo">Gentoo</option>
+  </select>
   <div id="myplot"></div>
 </Layout>
 
@@ -11,15 +17,27 @@ import Layout from "../layouts/Layout.astro";
   import * as Plot from "https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6/+esm";
   import penguins from "../assets/penguins.json";
 
-  const plot = Plot.plot({
-    marks: [
-      Plot.dot(penguins, {
-        x: "culmen_length_mm",
-        y: "culmen_depth_mm",
-        stroke: "species"
-      }),
-    ],
-  });
-  const div = document.querySelector("#myplot");
-  div.append(plot);
+  const selectSpecies = document.querySelector("#species");
+
+  function renderPlot() {
+    const species = selectSpecies.value;
+    const div = document.querySelector("#myplot");
+    div.innerHTML = "";
+
+    const plot = Plot.plot({
+      marks: [
+        Plot.dot(penguins, {
+          x: "culmen_length_mm",
+          y: "culmen_depth_mm",
+          stroke: "species",
+          filter: (d) => d.species == species,
+        }),
+      ],
+    });
+    div.append(plot);
+  }
+
+  selectSpecies.addEventListener("change", renderPlot );
+
+  renderPlot();
 </script>
