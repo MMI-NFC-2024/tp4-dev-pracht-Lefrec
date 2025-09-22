@@ -70,7 +70,7 @@ import Layout from "../layouts/Layout.astro";
     const plot = Plot.plot({
       marginLeft: 50,
       marginBottom: 50,
-      x: { label: "Day of Week" },
+      x: { label: "Day of Week", domain: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] },
       y: { label: "Total Orders", domain: [0, 600000] },
       marks: [
         Plot.barY(pizzas, {
