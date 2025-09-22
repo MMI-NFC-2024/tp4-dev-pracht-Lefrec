@@ -1,0 +1,80 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout>
+  <h1 class="text-2xl">Pizza Sales</h1>
+
+  <!-- Filters -->
+  <select id="category">
+    <option value="">All categories</option>
+    <option value="Classic">Classic</option>
+    <option value="Specialty">Specialty</option>
+    <option value="Vegetarian">Vegetarian</option>
+  </select>
+
+  <select id="size">
+    <option value="">All sizes</option>
+    <option value="Small">Small</option>
+    <option value="Medium">Medium</option>
+    <option value="Large">Large</option>
+    <option value="Extra Large">Extra Large</option>
+  </select>
+
+  <select id="price">
+    <option value="">All prices</option>
+    <option value="low">Under $15</option>
+    <option value="mid">$15–20</option>
+    <option value="high">Over $20</option>
+  </select>
+
+  <!-- Chart -->
+  <div id="myplot"></div>
+</Layout>
+
+<script>
+  import * as Plot from "https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6/+esm";
+  import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+  import pizzas from "../assets/pizza.json";
+
+  const selectCategory = document.querySelector("#category");
+  const selectSize = document.querySelector("#size");
+  const selectPrice = document.querySelector("#price");
+  const div = document.querySelector("#myplot");
+
+  function renderPlot() {
+    const category = selectCategory.value;
+    const size = selectSize.value;
+    const price = selectPrice.value;
+
+    div.innerHTML = "";
+
+    const plot = Plot.plot({
+      x: { label: "Day of Week" },
+      y: { label: "Total Orders", domain: [0, 600000] },
+      marks: [
+        Plot.barY(pizzas, {
+          x: "day_of_week",
+          y: "orders",
+          fill: "name",
+          filter: (d) =>
+            (category === "" || d.category === category) &&
+            (size === "" || d.name.includes(size)) &&
+            (price === "" ||
+              (price === "low" && d.price < 15) ||
+              (price === "mid" && d.price >= 15 && d.price <= 20) ||
+              (price === "high" && d.price > 20)),
+        }),
+        Plot.ruleY([0]),
+      ],
+    });
+
+    div.append(plot);
+  }
+
+  selectCategory.addEventListener("change", renderPlot);
+  selectSize.addEventListener("change", renderPlot);
+  selectPrice.addEventListener("change", renderPlot);
+
+  renderPlot();
+</script>

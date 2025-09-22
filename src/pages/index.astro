@@ -45,16 +45,19 @@ import Layout from "../layouts/Layout.astro";
           x: "culmen_length_mm",
           y: "culmen_depth_mm",
           stroke: "species",
-          filter: (d) => (species == "" || d.species == species) && (island == "" || d.island == island) && (sex == "" || d.sex == sex),
+          filter: (d) =>
+            (species == "" || d.species == species) &&
+            (island == "" || d.island == island) &&
+            (sex == "" || d.sex == sex),
         }),
       ],
     });
     div.append(plot);
   }
 
-  selectSpecies.addEventListener("change", renderPlot );
-  selectIsland.addEventListener("change", renderPlot );
-  selectSex.addEventListener("change", renderPlot );
+  selectSpecies.addEventListener("change", renderPlot);
+  selectIsland.addEventListener("change", renderPlot);
+  selectSex.addEventListener("change", renderPlot);
 
   renderPlot();
 </script>
