@@ -3,33 +3,51 @@ import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout>
-  <h1 class="text-2xl">Pizza Sales</h1>
+  <div class="max-w-4xl mx-auto p-6">
+    <h1 class="text-3xl font-bold mb-6 text-center text-gray-800">
+      R312 TP4 Pizzas
+    </h1>
 
-  <!-- Filters -->
-  <select id="category">
-    <option value="">All categories</option>
-    <option value="Classic">Classic</option>
-    <option value="Specialty">Specialty</option>
-    <option value="Vegetarian">Vegetarian</option>
-  </select>
+    <div class="flex flex-wrap gap-4 justify-center mb-8">
+      <select
+        id="category"
+        class="px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        <option value="">All categories</option>
+        <option value="Classic">Classic</option>
+        <option value="Specialty">Specialty</option>
+        <option value="Vegetarian">Vegetarian</option>
+      </select>
 
-  <select id="size">
-    <option value="">All sizes</option>
-    <option value="Small">Small</option>
-    <option value="Medium">Medium</option>
-    <option value="Large">Large</option>
-    <option value="Extra Large">Extra Large</option>
-  </select>
+      <select
+        id="size"
+        class="px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        <option value="">All sizes</option>
+        <option value="Small">Small</option>
+        <option value="Medium">Medium</option>
+        <option value="Large">Large</option>
+        <option value="Extra Large">Extra Large</option>
+      </select>
 
-  <select id="price">
-    <option value="">All prices</option>
-    <option value="low">Under $15</option>
-    <option value="mid">$15–20</option>
-    <option value="high">Over $20</option>
-  </select>
+      <select
+        id="price"
+        class="px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        <option value="">All prices</option>
+        <option value="low">Under $15</option>
+        <option value="mid">$15–20</option>
+        <option value="high">Over $20</option>
+      </select>
 
-  <!-- Chart -->
-  <div id="myplot"></div>
+      <a href="/" class="px-4 py-2 border border-gray-300 rounded-lg shadow-sm hover:outline-none hover:ring-2 hover:ring-blue-500">PENGUINS</a>
+    </div>
+
+    <div
+      id="myplot"
+      class="bg-white shadow-md rounded-lg p-4 border border-gray-200 flex justify-center"
+    ></div>
+  </div>
 </Layout>
 
 <script>
@@ -50,6 +68,8 @@ import Layout from "../layouts/Layout.astro";
     div.innerHTML = "";
 
     const plot = Plot.plot({
+      marginLeft: 50,
+      marginBottom: 50,
       x: { label: "Day of Week" },
       y: { label: "Total Orders", domain: [0, 600000] },
       marks: [
@@ -60,10 +80,12 @@ import Layout from "../layouts/Layout.astro";
           filter: (d) =>
             (category === "" || d.category === category) &&
             (size === "" || d.name.includes(size)) &&
-            (price === "" ||
+            (
+              price === "" ||
               (price === "low" && d.price < 15) ||
               (price === "mid" && d.price >= 15 && d.price <= 20) ||
-              (price === "high" && d.price > 20)),
+              (price === "high" && d.price > 20)
+            ),
         }),
         Plot.ruleY([0]),
       ],
